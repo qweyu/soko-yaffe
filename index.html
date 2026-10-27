@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Soko Yaffe – Farm market portal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f1f4ec;--surface:#fff;--ink:#16302a;--muted:#5b6b64;--line:#d5ddd0;--brand:#1f6b4f;--brand-ink:#fff;--sun:#f2b01e;--up:#1f7a45;--down:#b3402f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a16;--surface:#17251f;--ink:#e8efe9;--muted:#9fb1a8;--line:#2a3d34;--brand:#4fb88c;--brand-ink:#0b1712;--sun:#f2b01e;--up:#5fd08c;--down:#f08a79;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a16;--surface:#17251f;--ink:#e8efe9;--muted:#9fb1a8;--line:#2a3d34;--brand:#4fb88c;--brand-ink:#0b1712;--up:#5fd08c;--down:#f08a79;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header{background:var(--brand);color:var(--brand-ink)}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.logo{font:800 1.25rem "Bricolage Grotesque",sans-serif}
+.hero{padding:18px 0 28px}
+.hero h1{font-size:clamp(1.9rem,6vw,3rem);font-weight:800;max-width:15ch}
+.hero p{max-width:46ch;margin:10px 0 18px;opacity:.92}
+.search{display:flex;gap:8px;flex-wrap:wrap}
+.search input{flex:1 1 220px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+button,.btn{font:700 1rem "Nunito Sans",sans-serif;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;background:var(--sun);color:#2a1d00;text-decoration:none;display:inline-block;text-align:center}
+.btn.alt{background:var(--brand);color:var(--brand-ink)}
+.btn.line{background:transparent;color:var(--ink);border:2px solid var(--line)}
+nav[role=tablist]{display:flex;gap:4px;background:var(--surface);border-bottom:2px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;overflow-x:auto}
+nav button{background:transparent;color:var(--muted);border-radius:0;padding:14px 16px;border-bottom:4px solid transparent;white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--sun)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:10}
+main{padding:20px 0 40px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.card h3{font-size:1.15rem}
+.price{font:800 1.35rem "Bricolage Grotesque",sans-serif;color:var(--brand)}
+.meta{color:var(--muted);font-size:.9rem}
+.tag{display:inline-block;font-size:.8rem;font-weight:700;background:color-mix(in srgb,var(--sun) 30%,transparent);border-radius:6px;padding:2px 8px;width:fit-content}
+.actions{display:flex;gap:8px;margin-top:auto;padding-top:8px}
+.actions a{flex:1}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:2px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:.9rem;color:var(--muted)}
+.scroll{overflow-x:auto}
+.up{color:var(--up);font-weight:700}.down{color:var(--down);font-weight:700}
+form{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px;max-width:560px}
+label{font-weight:700;display:grid;gap:4px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note{background:color-mix(in srgb,var(--sun) 22%,transparent);border-radius:10px;padding:10px 14px;margin:0 0 16px;font-size:.95rem}
+.empty{padding:30px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:12px}
+[hidden]{display:none!important}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:8px;z-index:20}
+footer{border-top:2px solid var(--line);padding:18px 0 28px;color:var(--muted);font-size:.9rem}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top"><span class="logo">Soko Yaffe</span><span>Farm market portal</span></div>
+    <div class="hero">
+      <h1>Sell your harvest at a fair price.</h1>
+      <p>Post what you have, see today’s prices, and call buyers directly. No middlemen taking a cut.</p>
+      <div class="search">
+        <input id="q" type="search" placeholder="Search matooke, eggs, goats…" aria-label="Search products">
+        <button class="btn" id="go" type="button">Find produce</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav role="tablist" aria-label="Portal sections"><div class="wrap" style="display:flex;gap:4px;padding:0 8px">
+  <button role="tab" id="t-buy" aria-selected="true" aria-controls="p-buy">Buy produce</button>
+  <button role="tab" id="t-sell" aria-selected="false" aria-controls="p-sell">Sell produce</button>
+  <button role="tab" id="t-prices" aria-selected="false" aria-controls="p-prices">Price board</button>
+  <button role="tab" id="t-help" aria-selected="false" aria-controls="p-help">How it works</button>
+</div></nav>
+
+<main class="wrap">
+  <p class="note">These are sample listings to show how the portal works. Replace them with real farmers’ posts when you launch.</p>
+
+  <section id="p-buy" role="tabpanel" aria-labelledby="t-buy">
+    <div class="filters">
+      <select id="fcat" aria-label="Category"><option value="">All categories</option></select>
+      <select id="fdist" aria-label="District"><option value="">All districts</option></select>
+      <select id="fsort" aria-label="Sort"><option value="new">Newest first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select>
+    </div>
+    <p class="meta" id="count" aria-live="polite"></p>
+    <div class="grid" id="list"></div>
+  </section>
+
+  <section id="p-sell" role="tabpanel" aria-labelledby="t-sell" hidden>
+    <h2 style="margin-bottom:12px">Post what you want to sell</h2>
+    <form id="sellForm">
+      <label>Your name<input name="seller" required autocomplete="name"></label>
+      <div class="row">
+        <label>Product<input name="item" required placeholder="e.g. Eggs, Goat, Beans"></label>
+        <label>Category<select name="cat" required></select></label>
+      </div>
+      <div class="row">
+        <label>Quantity<input name="qty" required placeholder="e.g. 20 trays"></label>
+        <label>Price (UGX) per unit<input name="price" type="number" min="0" required inputmode="numeric"></label>
+      </div>
+      <div class="row">
+        <label>District<select name="dist" required></select></label>
+        <label>Phone / WhatsApp<input name="phone" type="tel" required inputmode="tel" placeholder="07XX XXX XXX"></label>
+      </div>
+      <label>Details (optional)<textarea name="note" rows="3" placeholder="Breed, quality, pick-up place, delivery"></textarea></label>
+      <button class="btn" type="submit">Post listing</button>
+    </form>
+  </section>
+
+  <section id="p-prices" role="tabpanel" aria-labelledby="t-prices" hidden>
+    <h2 style="margin-bottom:4px">Price board</h2>
+    <p class="meta" style="margin:0 0 12px">Average prices in UGX across nearby markets, with the last six weeks.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Product</th><th>Unit</th><th>Today</th><th>Week change</th><th>6-week trend</th></tr></thead>
+      <tbody id="board"></tbody>
+    </table></div>
+    <p class="meta">Tip: if the trend is rising, hold stock a little longer. If it is falling, sell sooner.</p>
+  </section>
+
+  <section id="p-help" role="tabpanel" aria-labelledby="t-help" hidden>
+    <h2 style="margin-bottom:12px">How it works</h2>
+    <div class="grid">
+      <div class="card"><h3>Farmers</h3><p>Post your produce with quantity, price, and your phone number. Update or remove it when sold.</p></div>
+      <div class="card"><h3>Buyers</h3><p>Search by product or district, then call or message the farmer on WhatsApp to agree on price and pick-up.</p></div>
+      <div class="card"><h3>Payment</h3><p>Pay by mobile money or cash on delivery. Meet in a public place and check goods before paying.</p></div>
+      <div class="card"><h3>No smartphone?</h3><p>Plan for an SMS or USSD option and a community agent at the ICT centre who posts listings for farmers.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Soko Yaffe is a community project. Always confirm quality and price before you pay.</div></footer>
+<div id="toast" hidden role="status"></div>
+
+<script>
+var CATS=["Vegetables","Fruits","Grains and legumes","Poultry and eggs","Goats and sheep","Pigs","Rabbits","Dairy"];
+var DISTS=["Wakiso","Mukono","Masaka","Mbarara","Gulu","Mbale","Jinja"];
+var seed=[
+{id:1,seller:"Namusoke Grace",item:"Matooke (bunches)",cat:"Fruits",qty:"40 bunches",price:18000,dist:"Masaka",phone:"0700000001",note:"Big green bunches, can deliver to Kampala.",t:6},
+{id:2,seller:"Okello David",item:"Eggs (trays of 30)",cat:"Poultry and eggs",qty:"60 trays",price:10500,dist:"Gulu",phone:"0700000002",note:"Fresh daily from free-range hens.",t:5},
+{id:3,seller:"Akello Joyce",item:"Goats (live)",cat:"Goats and sheep",qty:"12 goats",price:220000,dist:"Mbarara",phone:"0700000003",note:"Boer cross, 8 to 10 months.",t:4},
+{id:4,seller:"Mukasa Peter",item:"Maize grain",cat:"Grains and legumes",qty:"2 tonnes",price:1100,dist:"Mukono",phone:"0700000004",note:"Dry, per kg. Bring your own bags.",t:3},
+{id:5,seller:"Nambi Sarah",item:"Tomatoes",cat:"Vegetables",qty:"30 crates",price:45000,dist:"Wakiso",phone:"0700000005",note:"Per crate. Harvested this morning.",t:2},
+{id:6,seller:"Wanyama Isaac",item:"Rabbits (meat)",cat:"Rabbits",qty:"15 rabbits",price:35000,dist:"Mbale",phone:"0700000006",note:"New Zealand White, 4 months.",t:1},
+{id:7,seller:"Kato Moses",item:"Pig weaners",cat:"Pigs",qty:"10 weaners",price:150000,dist:"Jinja",phone:"0700000007",note:"Large White cross, dewormed.",t:0}
+];
+var PRICES=[
+["Matooke (bunch)","bunch",[15000,15500,16500,17000,17500,18000]],
+["Maize grain","kg",[1300,1250,1200,1150,1120,1100]],
+["Beans","kg",[3200,3300,3300,3400,3500,3600]],
+["Tomatoes","crate",[60000,55000,52000,48000,46000,45000]],
+["Eggs","tray of 30",[10000,10000,10200,10300,10400,10500]],
+["Goat (live)","each",[200000,205000,210000,212000,218000,220000]],
+["Rabbit (live)","each",[32000,32000,33000,34000,34500,35000]]
+];
+var listings=seed.slice();
+try{var s=JSON.parse(localStorage.getItem("soko_posts")||"[]");if(Array.isArray(s))listings=s.concat(seed)}catch(e){}
+function $(i){return document.getElementById(i)}
+function fmt(n){return "UGX "+Number(n).toLocaleString("en-UG")}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function opts(el,arr,first){el.innerHTML=(first?'<option value="">'+first+'</option>':"")+arr.map(function(x){return '<option>'+x+'</option>'}).join("")}
+opts($("fcat"),CATS,"All categories");opts($("fdist"),DISTS,"All districts");
+opts(document.querySelector("[name=cat]"),CATS);opts(document.querySelector("[name=dist]"),DISTS);
+function wa(p){var d=String(p).replace(/\D/g,"");if(d[0]==="0")d="256"+d.slice(1);return "https://wa.me/"+d}
+function render(){
+  var q=$("q").value.trim().toLowerCase(),c=$("fcat").value,d=$("fdist").value,so=$("fsort").value;
+  var r=listings.filter(function(l){return (!c||l.cat===c)&&(!d||l.dist===d)&&(!q||(l.item+" "+l.cat+" "+l.note+" "+l.dist).toLowerCase().indexOf(q)>-1)});
+  r.sort(function(a,b){return so==="low"?a.price-b.price:so==="high"?b.price-a.price:b.t-a.t});
+  $("count").textContent=r.length+" listing"+(r.length===1?"":"s")+" found";
+  $("list").innerHTML=r.length?r.map(function(l){return '<article class="card"><span class="tag">'+esc(l.cat)+'</span><h3>'+esc(l.item)+'</h3><div class="price">'+fmt(l.price)+'</div><div class="meta">'+esc(l.qty)+' · '+esc(l.dist)+'</div><div class="meta">Seller: '+esc(l.seller)+'</div>'+(l.note?'<p style="margin:0">'+esc(l.note)+'</p>':"")+'<div class="actions"><a class="btn alt" href="tel:'+esc(l.phone)+'">Call</a><a class="btn line" href="'+wa(l.phone)+'" target="_blank" rel="noopener">WhatsApp</a></div></article>'}).join(""):'<div class="empty" style="grid-column:1/-1">No listings match. Try another district or category, or post your own.</div>';
+}
+function spark(v){var w=90,h=28,mn=Math.min.apply(0,v),mx=Math.max.apply(0,v),rg=mx-mn||1;
+  var p=v.map(function(y,i){return (i*(w/(v.length-1))).toFixed(1)+","+(h-2-((y-mn)/rg)*(h-4)).toFixed(1)}).join(" ");
+  var col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";
+  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Price trend"><polyline points="'+p+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+$("board").innerHTML=PRICES.map(function(p){var v=p[2],n=v[v.length-1],ch=((n-v[v.length-2])/v[v.length-2]*100);
+  return '<tr><td><strong>'+p[0]+'</strong></td><td>'+p[1]+'</td><td>'+fmt(n)+'</td><td class="'+(ch>=0?"up":"down")+'">'+(ch>=0?"+":"")+ch.toFixed(1)+'%</td><td>'+spark(v)+'</td></tr>'}).join("");
+var tabs=["buy","sell","prices","help"];
+function show(n){tabs.forEach(function(t){var on=t===n;$("t-"+t).setAttribute("aria-selected",on);$("p-"+t).hidden=!on});window.scrollTo({top:0})}
+tabs.forEach(function(t){$("t-"+t).addEventListener("click",function(){show(t)})});
+$("go").addEventListener("click",function(){show("buy");render()});
+$("q").addEventListener("input",render);
+$("q").addEventListener("keydown",function(e){if(e.key==="Enter"){show("buy");render()}});
+["fcat","fdist","fsort"].forEach(function(i){$(i).addEventListener("change",render)});
+function toast(m){var t=$("toast");t.textContent=m;t.hidden=false;setTimeout(function(){t.hidden=true},2600)}
+$("sellForm").addEventListener("submit",function(e){e.preventDefault();
+  var f=new FormData(e.target),o={id:Date.now(),t:Date.now()};f.forEach(function(v,k){o[k]=v});o.price=Number(o.price);
+  listings.unshift(o);
+  try{var mine=listings.filter(function(l){return l.id>1e6});localStorage.setItem("soko_posts",JSON.stringify(mine))}catch(x){}
+  e.target.reset();render();show("buy");toast("Listing posted")});
+render();
+</script>
+</body>
+</html>
